@@ -22,10 +22,21 @@ for i in range(len(info_list)):
     a = re.sub("\s\s+", "_", a)
     info_list[i] = a
 
-# Creates an empty list to store the new data
+# Creates an empty list to store the new data such
+# that each element is a single list item
 data = []
 for i in range(len(info_list)):
     a = info_list[i]
-    print(a)
+    temp_list = a.split("_")
+    #print(temp_list)
+    for k in range(len(temp_list)):
+        b = temp_list[k]
+        data.append(b)
+        #print(b)
 
-#print(data)
+# TO DO -
+# Rip artifacts for easy readability
+# Upload data to database
+# Try PDF2 to rip only form-filled sections
+
+print(data)
