@@ -35,8 +35,9 @@ for i in range(len(info_list)):
         #print(b)
 
 # TO DO -
+# Try PDF2 to rip only form-filled sections
 # Rip artifacts for easy readability
 # Upload data to database
-# Try PDF2 to rip only form-filled sections
+
 
 print(data)
