@@ -2,6 +2,9 @@ import math
 
 class Character:
     # Base Stats
+    NAME = ""
+    LEVEL = 0
+    PROFICIENCY = 0
     STR = 0
     DEX = 0
     CON = 0
@@ -40,95 +43,212 @@ class Character:
 
     # Lists
     PROFICIENCIES = []
-    VULNERABILITIES = []
+    EXPERTISES = []
     RESISTANCES = []
+    VULNERABILITIES = []
 
     # Constructs a character with the given stats
-    def __init__(self, str = 0, dex = 0, \
-        con = 0, int = 0, wis = 0, cha = 0):
-        STR = str
-        DEX = dex
-        CON = con
-        INT = int
-        WIS = wis
-        CHA = cha
+    def __init__(self, name = "Unnamed", level = 0, str = 0, dex = 0, \
+        con = 0, int = 0, wis = 0, cha = 0, prof = ["None"], res = ["None"], vuln = ["None"], expert = ["None"]):
+        self.NAME = name
+        self.LEVEL = level
+        self.STR = str
+        self.DEX = dex
+        self.CON = con
+        self.INT = int
+        self.WIS = wis
+        self.CHA = cha
+        self.PROFICIENCIES = prof
+        self.EXPERTISES = expert
+        self.RESISTANCES = res
+        self.VULNERABILITIES = vuln
+
+    # Represent function for disambiguation
+    def __repr__(self):
+        return "This is a 'Character' object."
+    
+    def __str__(self):
+        print("----- CHARACTER: " + self.NAME + " -----")
+        print("Level: " + str(self.LEVEL))
+        print("Proficiency bonus: " + self.format(self.PROFICIENCY))
+        print("STRENGTH: " + str(self.STR) + \
+            " (" + self.format(self.getMod(self.STR)) + ")")
+        print("DEXTERITY: " + str(self.DEX) + \
+            " (" + self.format(self.getMod(self.DEX)) + ")")
+        print("CONSTITUTION: " + str(self.CON) + \
+            " (" + self.format(self.getMod(self.CON)) + ")")
+        print("INTELLIGENCE: " + str(self.INT) + \
+            " (" + self.format(self.getMod(self.INT)) + ")")
+        print("WISDOM: " + str(self.WIS) + \
+            " (" + self.format(self.getMod(self.WIS)) + ")")
+        print("CHARISMA: " + str(self.CHA) + \
+            " (" + self.format(self.getMod(self.CHA)) + ")")
+        print("\n----- SAVES -----")
+        print("Strength Save: " + self.format(self.getMod(self.STR, "strength saves")))
+        print("Dexterity Save: " + self.format(self.getMod(self.DEX, "dexterity saves")))
+        print("Constitution Save: " + self.format(self.getMod(self.CON, "constitution saves")))
+        print("Intelligence Save: " + self.format(self.getMod(self.INT, "intelligence saves")))
+        print("Wisdom Save: " + self.format(self.getMod(self.WIS, "wisdom saves")))
+        print("Charisma Save: " + self.format(self.getMod(self.CHA, "charisma saves")))
+        print("\n----- SKILLS -----")
+        print("Acrobatics: " + self.format(self.getMod(self.DEX, "acrobatics")))
+        print("Animal Handling: " + self.format(self.getMod(self.WIS, "animal handling")))
+        print("Arcana: " + self.format(self.getMod(self.INT, "arcana")))
+        print("Athletics: " + self.format(self.getMod(self.STR, "athletics")))
+        print("Deception: " + self.format(self.getMod(self.CHA, "deception")))
+        print("History: " + self.format(self.getMod(self.INT, "history")))
+        print("Insight: " + self.format(self.getMod(self.WIS, "insight")))
+        print("Intimidation " + self.format(self.getMod(self.CHA, "intimidation")))
+        print("Investigation: " + self.format(self.getMod(self.INT, "investigation")))
+        print("Medicine: " + self.format(self.getMod(self.WIS, "medicine")))
+        print("Nature: " + self.format(self.getMod(self.INT, "nature")))
+        print("Perception: " + self.format(self.getMod(self.WIS, "perception")))
+        print("Performance: " + self.format(self.getMod(self.CHA, "performance")))
+        print("Persuasion: " + self.format(self.getMod(self.CHA, "persuasion")))
+        print("Religion: " + self.format(self.getMod(self.INT, "religion")))
+        print("Sleight of Hand: " + self.format(self.getMod(self.DEX, "sleight of hand")))
+        print("Stealth: " + self.format(self.getMod(self.DEX, "stealth")))
+        print("Survival: " + self.format(self.getMod(self.WIS, "survival")))
+        print("Passive Perception: " + str(10 + self.getMod(self.WIS, "perception")))
+        print("\n----- PROFICIENCIES -----")
+        temp = [i.title() for i in self.PROFICIENCIES]
+        print(temp)
+        print("\n----- EXPERTISES -----")
+        temp = [i.title() for i in self.EXPERTISES]
+        print(temp)
+        print("\n----- RESISTANCES -----")
+        temp = [i.title() for i in self.RESISTANCES]
+        print(self.RESISTANCES)
+        print("\n----- VULNERABILITIES -----")
+        temp = [i.title() for i in self.VULNERABILITIES]
+        print(self.VULNERABILITIES)
+        return ""
+    
+    # Adds a '+' symbol to positive numbers
+    def format(self, num):
+        if(num >= 0):
+            return "+" + str(num)
+        else:
+            return str(num)
+    
+    # Checks against proficiency & expertise list and returns modifier
+    def isProf(self, item):
+        for i in self.EXPERTISES:
+            if (item == i):
+                return (2 * self.PROFICIENCY)
+        for i in self.PROFICIENCIES:
+            if(item == i):
+                return self.PROFICIENCY
+        return 0
+
+    def addStat(self, stat = "stop", value = ""):
+        if (stat == "expertise"):
+            try:
+                self.EXPERTISES.remove("None")
+                self.EXPERTISES.append(value.lower())
+                self.PROFICIENCIES.append(value.lower())
+            except:
+                self.EXPERTISES.append(value.lower())
+                self.PROFICIENCIES.appen(value.lower())
+        elif (stat == "proficiency"):
+            try:
+                self.PROFICIENCIES.remove("None")
+                self.PROFICIENCIES.append(value.lower())
+            except:
+                self.PROFICIENCIES.append(value.lower())
+        elif (stat == "resistance"):
+            try:
+                self.RESISTANCES.remove("None")
+                self.RESISTANCES.append(value.lower())
+            except:
+                self.RESISTANCES.append(value.lower())
+        elif (stat == "vunerability"):
+            try:
+                self.VULNERABILITIES.remove("None")
+                self.VULNERABILITIES.append(value.lower())
+            except:
+                self.VULNERABILITIES.append(value.lower())
+        elif (stat == "stop"):
+            return
+    
+    def removeStat(self, stat = "stop", value = ""):
+        if (stat == "proficiency"):
+            self.PROFICIENCIES.remove(value.lower())
+        elif (stat == "resistance"):
+            self.RESISTANCES.remove(value.lower())
+        elif (stat == "vunerability"):
+            self.VULNERABILITIES.remove(value.lower())
+        elif (stat == "stop"):
+            return
+
     
     # Gets the modifier for the given stat
-    def getMod(self, stat):
+    def getMod(self, stat = 0, item = ""):
         mod = (int(stat) - 10) / 2
         if(mod < 0):
             mod = math.floor(mod)
-        return int(mod)
-
-    # Checks against proficiency list and returns modifier
-    def isProf(self, item):
-        pass
+        return int(mod + self.isProf(item))
     
     # Sets the skills of the character using base stats
     def set_specs(self):
-        # Get base modifications
-        strMod = self.getMod(self.STR)
-        dexMod = self.getMod(self.DEX)
-        conMod = self.getMod(self.CON)
-        intMod = self.getMod(self.STR)
-        wisMod = self.getMod(self.STR)
-        chaMod = self.getMod(self.STR)
+        # Set proficiency bonus
+        self.PROFICIENCY = math.ceil( 1 + (self.LEVEL / 4))
 
         # Set skills
         self.ACROBATICS = \
-            dexMod + self.isProf("Acrobatics")
+            self.getMod(self.DEX, "acrobatics")
         self.ANIMAL_HANDLING = \
-            wisMod + self.isProf("Animal Handling")
+            self.getMod(self.WIS, "animal handling")
         self.ARCANA = \
-            intMod + self.isProf("Arcana")
+            self.getMod(self.INT, "arcana")
         self.ATHLETICS = \
-            strMod + self.isProf("Athletics")
+            self.getMod(self.STR, "athletics")
         self.DECEPTION = \
-            chaMod + self.isProf("Deception")
+            self.getMod(self.CHA, "deception")
         self.HISTORY = \
-            intMod + self.isProf("History")
+            self.getMod(self.INT, "history")
         self.INSIGHT = \
-            wisMod + self.isProf("Insight")
+            self.getMod(self.WIS, "insight")
         self.INTIMIDATION = \
-            chaMod + self.isProf("Intimidation")
+            self.getMod(self.CHA, "intimidation")
         self.INVESTIGATION = \
-            intMod + self.isProf("Investigation")
+            self.getMod(self.INT, "investigation")
         self.MEDICINE = \
-            wisMod + self.isProf("Medicine")
+            self.getMod(self.WIS, "medicine")
         self.NATURE = \
-            intMod + self.isProf("Nature")
+            self.getMod(self.INT, "nature")
         self.PERCEPTION = \
-            wisMod + self.isProf("Perception")
+            self.getMod(self.WIS, "perception")
         self.PERFORMANCE = \
-            chaMod + self.isProf("Performance")
+            self.getMod(self.CHA, "performance")
         self.PERSUASION = \
-            chaMod + self.isProf("Persuasion")
+            self.getMod(self.CHA, "persuasion")
         self.RELIGION = \
-            intMod + self.isProf("Religion")
+            self.getMod(self.INT, "religion")
         self.SLEIGHT_OF_HAND = \
-            dexMod + self.isProf("Sleight of Hand")
+            self.getMod(self.DEX, "sleight of hand")
         self.STEALTH = \
-            dexMod + self.isProf("Stealth")
+            self.getMod(self.DEX, "stealth")
         self.SURVIVAL = \
-            wisMod + self.isProf("Survival")
-        self.PASSIVE_PERCEPTION = self.PERCEPTION + 10
+            self.getMod(self.WIS, "survival")
+        self.PASSIVE_PERCEPTION = self.getMod(self.WIS, "perception") + 10
 
         # Set saves
         self.STR_SAVE = \
-            strMod + self.isProf("Strength Saves")
+            self.getMod(self.STR, "strength saves")
         self.DEX_SAVE = \
-            dexMod + self.isProf("Dexterity Saves")
+            self.getMod(self.DEX, "dexterity saves")
         self.CON_SAVE = \
-            conMod + self.isProf("Constitution Saves")
+            self.getMod(self.CON, "constitution saves")
         self.INT_SAVE = \
-            intMod + self.isProf("Intelligence Saves")
+            self.getMod(self.INT, "intelligence saves")
         self.WIS_SAVE = \
-            wisMod + self.isProf("Wisdom Saves")
+            self.getMod(self.WIS, "wisdom saves")
         self.CHA_SAVE = \
-            chaMod + self.isProf("Charisma Saves")
+            self.getMod(self.CHA, "charisma saves")
 
 # TESTING CODE HERE
-char = Character()
-user_input = input("Please input a stat: ")
-out = char.getMod(user_input)
-print(out)
+char = Character("Errant", 9, 10, 18, 14, 12, 14, 20)
+char.addStat("expertise", "acrobatics")
+char.set_specs()
+print(char)
