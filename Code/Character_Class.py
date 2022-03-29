@@ -1,4 +1,5 @@
 import math
+import re
 
 class Character:
     # Base Stats
@@ -40,6 +41,7 @@ class Character:
     STEALTH = 0             # DEX
     SURVIVAL = 0            # WIS
     PASSIVE_PERCEPTION = 0  # Base
+    JACK_OF_ALL_TRADES = False #JOAT
 
     # Lists
     PROFICIENCIES = []
@@ -49,7 +51,8 @@ class Character:
 
     # Constructs a character with the given stats
     def __init__(self, name = "Unnamed", level = 0, str = 0, dex = 0, \
-        con = 0, int = 0, wis = 0, cha = 0, prof = ["None"], res = ["None"], vuln = ["None"], expert = ["None"]):
+        con = 0, int = 0, wis = 0, cha = 0, prof = ["None"], res = ["None"], \
+        vuln = ["None"], expert = ["None"], joat = False):
         self.NAME = name
         self.LEVEL = level
         self.STR = str
@@ -62,11 +65,13 @@ class Character:
         self.EXPERTISES = expert
         self.RESISTANCES = res
         self.VULNERABILITIES = vuln
+        self.JACK_OF_ALL_TRADES = joat
 
     # Represent function for disambiguation
     def __repr__(self):
         return "This is a 'Character' object."
     
+    # Print function for displaying object
     def __str__(self):
         print("----- CHARACTER: " + self.NAME + " -----")
         print("Level: " + str(self.LEVEL))
@@ -84,32 +89,32 @@ class Character:
         print("CHARISMA: " + str(self.CHA) + \
             " (" + self.format(self.getMod(self.CHA)) + ")")
         print("\n----- SAVES -----")
-        print("Strength Save: " + self.format(self.getMod(self.STR, "strength saves")))
-        print("Dexterity Save: " + self.format(self.getMod(self.DEX, "dexterity saves")))
-        print("Constitution Save: " + self.format(self.getMod(self.CON, "constitution saves")))
-        print("Intelligence Save: " + self.format(self.getMod(self.INT, "intelligence saves")))
-        print("Wisdom Save: " + self.format(self.getMod(self.WIS, "wisdom saves")))
-        print("Charisma Save: " + self.format(self.getMod(self.CHA, "charisma saves")))
+        print("Strength Save: " + self.format(self.STR_SAVE))
+        print("Dexterity Save: " + self.format(self.DEX_SAVE))
+        print("Constitution Save: " + self.format(self.CON_SAVE))
+        print("Intelligence Save: " + self.format(self.INT_SAVE))
+        print("Wisdom Save: " + self.format(self.WIS_SAVE))
+        print("Charisma Save: " + self.format(self.CHA_SAVE))
         print("\n----- SKILLS -----")
-        print("Acrobatics: " + self.format(self.getMod(self.DEX, "acrobatics")))
-        print("Animal Handling: " + self.format(self.getMod(self.WIS, "animal handling")))
-        print("Arcana: " + self.format(self.getMod(self.INT, "arcana")))
-        print("Athletics: " + self.format(self.getMod(self.STR, "athletics")))
-        print("Deception: " + self.format(self.getMod(self.CHA, "deception")))
-        print("History: " + self.format(self.getMod(self.INT, "history")))
-        print("Insight: " + self.format(self.getMod(self.WIS, "insight")))
-        print("Intimidation " + self.format(self.getMod(self.CHA, "intimidation")))
-        print("Investigation: " + self.format(self.getMod(self.INT, "investigation")))
-        print("Medicine: " + self.format(self.getMod(self.WIS, "medicine")))
-        print("Nature: " + self.format(self.getMod(self.INT, "nature")))
-        print("Perception: " + self.format(self.getMod(self.WIS, "perception")))
-        print("Performance: " + self.format(self.getMod(self.CHA, "performance")))
-        print("Persuasion: " + self.format(self.getMod(self.CHA, "persuasion")))
-        print("Religion: " + self.format(self.getMod(self.INT, "religion")))
-        print("Sleight of Hand: " + self.format(self.getMod(self.DEX, "sleight of hand")))
-        print("Stealth: " + self.format(self.getMod(self.DEX, "stealth")))
-        print("Survival: " + self.format(self.getMod(self.WIS, "survival")))
-        print("Passive Perception: " + str(10 + self.getMod(self.WIS, "perception")))
+        print("Acrobatics: " + self.format(self.ACROBATICS))
+        print("Animal Handling: " + self.format(self.ANIMAL_HANDLING))
+        print("Arcana: " + self.format(self.ARCANA))
+        print("Athletics: " + self.format(self.ATHLETICS))
+        print("Deception: " + self.format(self.DECEPTION))
+        print("History: " + self.format(self.HISTORY))
+        print("Insight: " + self.format(self.INSIGHT))
+        print("Intimidation " + self.format(self.INTIMIDATION))
+        print("Investigation: " + self.format(self.INVESTIGATION))
+        print("Medicine: " + self.format(self.MEDICINE))
+        print("Nature: " + self.format(self.NATURE))
+        print("Perception: " + self.format(self.PERCEPTION))
+        print("Performance: " + self.format(self.PERFORMANCE))
+        print("Persuasion: " + self.format(self.PERSUASION))
+        print("Religion: " + self.format(self.RELIGION))
+        print("Sleight of Hand: " + self.format(self.SLEIGHT_OF_HAND))
+        print("Stealth: " + self.format(self.STEALTH))
+        print("Survival: " + self.format(self.SURVIVAL))
+        print("Passive Perception: " + str(10 + self.PERCEPTION))
         print("\n----- PROFICIENCIES -----")
         temp = [i.title() for i in self.PROFICIENCIES]
         print(temp)
@@ -118,10 +123,10 @@ class Character:
         print(temp)
         print("\n----- RESISTANCES -----")
         temp = [i.title() for i in self.RESISTANCES]
-        print(self.RESISTANCES)
+        print(temp)
         print("\n----- VULNERABILITIES -----")
         temp = [i.title() for i in self.VULNERABILITIES]
-        print(self.VULNERABILITIES)
+        print(temp)
         return ""
     
     # Adds a '+' symbol to positive numbers
@@ -143,40 +148,54 @@ class Character:
 
     def addStat(self, stat = "stop", value = ""):
         if (stat == "expertise"):
-            try:
+            if(self.EXPERTISES[0] == "None" and self.PROFICIENCIES[0] == "None"):
                 self.EXPERTISES.remove("None")
-                self.EXPERTISES.append(value.lower())
-                self.PROFICIENCIES.append(value.lower())
-            except:
-                self.EXPERTISES.append(value.lower())
-                self.PROFICIENCIES.appen(value.lower())
-        elif (stat == "proficiency"):
-            try:
                 self.PROFICIENCIES.remove("None")
-                self.PROFICIENCIES.append(value.lower())
-            except:
+                if(value.lower() not in self.EXPERTISES):
+                    self.EXPERTISES.append(value.lower())
+                if(value.lower() not in self.PROFICIENCIES):
+                    self.PROFICIENCIES.append(value.lower())
+            elif(self.EXPERTISES[0] == "None" and self.PROFICIENCIES[0] != "None"):
+                self.EXPERTISES.remove("None")
+                if(value.lower() not in self.EXPERTISES):
+                    self.EXPERTISES.append(value.lower())
+                if(value.lower() not in self.PROFICIENCIES):
+                    self.PROFICIENCIES.append(value.lower())
+            elif(self.EXPERTISES[0] != "None" and self.PROFICIENCIES[0] == "None"):
+                self.PROFICIENCIES.remove("None")
+                if(value.lower() not in self.EXPERTISES):
+                    self.EXPERTISES.append(value.lower())
+                if(value.lower() not in self.PROFICIENCIES):
+                    self.PROFICIENCIES.append(value.lower())
+            else:
+                if(value.lower() not in self.EXPERTISES):
+                    self.EXPERTISES.append(value.lower())
+                if(value.lower() not in self.PROFICIENCIES):
+                    self.PROFICIENCIES.append(value.lower())
+        elif (stat == "proficiency"):
+            if(self.PROFICIENCIES[0] == "None"):
+                self.PROFICIENCIES.remove("None")
+            if(value.lower() not in self.PROFICIENCIES):
                 self.PROFICIENCIES.append(value.lower())
         elif (stat == "resistance"):
-            try:
+            if(self.RESISTANCES[0] == "None"):
                 self.RESISTANCES.remove("None")
+            if(value.lower() not in self.RESISTANCES):
                 self.RESISTANCES.append(value.lower())
-            except:
-                self.RESISTANCES.append(value.lower())
-        elif (stat == "vunerability"):
-            try:
+        elif (stat == "vulnerability"):
+            if(self.VULNERABILITIES[0] == "None"):
                 self.VULNERABILITIES.remove("None")
-                self.VULNERABILITIES.append(value.lower())
-            except:
+            if(value.lower() not in self.VULNERABILITIES):
                 self.VULNERABILITIES.append(value.lower())
         elif (stat == "stop"):
             return
     
     def removeStat(self, stat = "stop", value = ""):
-        if (stat == "proficiency"):
+        if (stat == "proficiency" and (value.lower() in self.PROFICIENCIES)):
             self.PROFICIENCIES.remove(value.lower())
-        elif (stat == "resistance"):
+        elif (stat == "resistance" and (value.lower() in self.RESISTANCES)):
             self.RESISTANCES.remove(value.lower())
-        elif (stat == "vunerability"):
+        elif (stat == "vunerability" and (value.lower() in self.VULNERABILITIES)):
             self.VULNERABILITIES.remove(value.lower())
         elif (stat == "stop"):
             return
@@ -185,9 +204,15 @@ class Character:
     # Gets the modifier for the given stat
     def getMod(self, stat = 0, item = ""):
         mod = (int(stat) - 10) / 2
+        joat = 0
         if(mod < 0):
             mod = math.floor(mod)
-        return int(mod + self.isProf(item))
+        if(self.JACK_OF_ALL_TRADES == True and \
+            item != "" and \
+            not(bool(re.match("\w*\ssaves$", item.lower()))) and \
+            item.lower() not in self.PROFICIENCIES):
+                joat = math.floor(self.PROFICIENCY / 2)
+        return int(mod + self.isProf(item) + joat)
     
     # Sets the skills of the character using base stats
     def set_specs(self):
@@ -250,5 +275,14 @@ class Character:
 # TESTING CODE HERE
 char = Character("Errant", 9, 10, 18, 14, 12, 14, 20)
 char.addStat("expertise", "acrobatics")
+char.addStat("expertise", "performance")
+char.addStat("proficiency", "perception")
+char.addStat("proficiency", "stealth")
+char.addStat("proficiency", "charisma saves")
+char.addStat("proficiency", "dexterity saves")
+char.addStat("resistance", "fire")
+char.JACK_OF_ALL_TRADES = True
+
 char.set_specs()
+#print(bool(re.match("\w*\ssave$", "Acrobatics")))
 print(char)
