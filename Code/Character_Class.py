@@ -6,6 +6,10 @@ class Character:
     NAME = ""
     LEVEL = 0
     PROFICIENCY = 0
+    AC = 0
+    INITIATIVE = 0
+    CURRENT_HP = 0
+    MAX_HP = 0
     STR = 0
     DEX = 0
     CON = 0
@@ -20,6 +24,9 @@ class Character:
     INT_SAVE = 0
     WIS_SAVE = 0
     CHA_SAVE = 0
+
+    DEATH_SUCCESS = 0
+    DEATH_FAILURE = 0
 
     # Skills
     ACROBATICS = 0          # DEX
@@ -50,22 +57,30 @@ class Character:
     VULNERABILITIES = []
 
     # Constructs a character with the given stats
-    def __init__(self, name = "Unnamed", level = 0, str = 0, dex = 0, \
-        con = 0, int = 0, wis = 0, cha = 0, prof = ["None"], res = ["None"], \
-        vuln = ["None"], expert = ["None"], joat = False):
+    def __init__(self, name = "Unnamed", level = 0, currhp = 0, maxhp = 0, \
+        ac = 0, str = 0, dex = 0, con = 0, int = 0, wis = 0, cha = 0, \
+        prof = ["None"], res = ["None"], vuln = ["None"], expert = ["None"], \
+        joat = False, success = 0, failure = 0, init = 0):
         self.NAME = name
         self.LEVEL = level
+        self.AC = ac
+        self.INITIATIVE = init
+        self.CURRENT_HP = currhp
+        self.MAX_HP = maxhp
         self.STR = str
         self.DEX = dex
         self.CON = con
         self.INT = int
         self.WIS = wis
         self.CHA = cha
+        self.DEATH_SUCCESS = success
+        self.DEATH_FAILURE = failure
         self.PROFICIENCIES = prof
         self.EXPERTISES = expert
         self.RESISTANCES = res
         self.VULNERABILITIES = vuln
         self.JACK_OF_ALL_TRADES = joat
+        self.set_specs()
 
     # Represent function for disambiguation
     def __repr__(self):
@@ -73,9 +88,13 @@ class Character:
     
     # Print function for displaying object
     def __str__(self):
+        self.set_specs()
         print("----- CHARACTER: " + self.NAME + " -----")
         print("Level: " + str(self.LEVEL))
         print("Proficiency bonus: " + self.format(self.PROFICIENCY))
+        print("Initiative: " + self.format(self.INITIATIVE))
+        print("AC: " + str(self.AC))
+        print("HP: " + str(self.CURRENT_HP) + "/" + str(self.MAX_HP))
         print("STRENGTH: " + str(self.STR) + \
             " (" + self.format(self.getMod(self.STR)) + ")")
         print("DEXTERITY: " + str(self.DEX) + \
@@ -95,6 +114,9 @@ class Character:
         print("Intelligence Save: " + self.format(self.INT_SAVE))
         print("Wisdom Save: " + self.format(self.WIS_SAVE))
         print("Charisma Save: " + self.format(self.CHA_SAVE))
+        print("\n----- DEATH SAVES -----")
+        print("Sucesses: " + str(self.DEATH_SUCCESS))
+        print("Failures: " + str(self.DEATH_FAILURE))
         print("\n----- SKILLS -----")
         print("Acrobatics: " + self.format(self.ACROBATICS))
         print("Animal Handling: " + self.format(self.ANIMAL_HANDLING))
@@ -147,7 +169,7 @@ class Character:
         return 0
 
     def addStat(self, stat = "stop", value = ""):
-        if (stat == "expertise"):
+        if (stat.lower() == "expertise"):
             if(self.EXPERTISES[0] == "None" and self.PROFICIENCIES[0] == "None"):
                 self.EXPERTISES.remove("None")
                 self.PROFICIENCIES.remove("None")
@@ -172,22 +194,25 @@ class Character:
                     self.EXPERTISES.append(value.lower())
                 if(value.lower() not in self.PROFICIENCIES):
                     self.PROFICIENCIES.append(value.lower())
-        elif (stat == "proficiency"):
+        elif (stat.lower() == "proficiency"):
             if(self.PROFICIENCIES[0] == "None"):
                 self.PROFICIENCIES.remove("None")
             if(value.lower() not in self.PROFICIENCIES):
                 self.PROFICIENCIES.append(value.lower())
-        elif (stat == "resistance"):
+        elif (stat.lower() == "resistance"):
             if(self.RESISTANCES[0] == "None"):
                 self.RESISTANCES.remove("None")
             if(value.lower() not in self.RESISTANCES):
                 self.RESISTANCES.append(value.lower())
-        elif (stat == "vulnerability"):
+        elif (stat.lower() == "vulnerability"):
             if(self.VULNERABILITIES[0] == "None"):
                 self.VULNERABILITIES.remove("None")
             if(value.lower() not in self.VULNERABILITIES):
                 self.VULNERABILITIES.append(value.lower())
-        elif (stat == "stop"):
+        elif (stat.lower() == "stop"):
+            return
+        else:
+            print("Please choose from 'Proficiency', 'Expertise', 'Resistance', or 'Vulnerability'.")
             return
     
     def removeStat(self, stat = "stop", value = ""):
@@ -198,6 +223,9 @@ class Character:
         elif (stat == "vunerability" and (value.lower() in self.VULNERABILITIES)):
             self.VULNERABILITIES.remove(value.lower())
         elif (stat == "stop"):
+            return
+        else:
+            print("The statistic requested does not exist in the list defined.")
             return
 
     
@@ -218,6 +246,9 @@ class Character:
     def set_specs(self):
         # Set proficiency bonus
         self.PROFICIENCY = math.ceil( 1 + (self.LEVEL / 4))
+
+        # Set initiative
+        self.INITIATIVE = self.getMod(self.DEX, "initiative")
 
         # Set skills
         self.ACROBATICS = \
@@ -271,18 +302,3 @@ class Character:
             self.getMod(self.WIS, "wisdom saves")
         self.CHA_SAVE = \
             self.getMod(self.CHA, "charisma saves")
-
-# TESTING CODE HERE
-char = Character("Errant", 9, 10, 18, 14, 12, 14, 20)
-char.addStat("expertise", "acrobatics")
-char.addStat("expertise", "performance")
-char.addStat("proficiency", "perception")
-char.addStat("proficiency", "stealth")
-char.addStat("proficiency", "charisma saves")
-char.addStat("proficiency", "dexterity saves")
-char.addStat("resistance", "fire")
-char.JACK_OF_ALL_TRADES = True
-
-char.set_specs()
-#print(bool(re.match("\w*\ssave$", "Acrobatics")))
-print(char)
