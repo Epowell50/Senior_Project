@@ -1,6 +1,8 @@
 import math
 import re
 
+from Attack import *
+
 class Character:
     # Base Stats
     NAME = ""
@@ -55,6 +57,9 @@ class Character:
     EXPERTISES = []
     RESISTANCES = []
     VULNERABILITIES = []
+    ACTIONS = [] # By name
+    ATTACKS = [] # By name
+    SPELLS = [] # By name
 
     # Constructs a character with the given stats
     def __init__(self, name = "Unnamed", level = 0, currhp = 0, maxhp = 0, \
@@ -168,6 +173,7 @@ class Character:
                 return self.PROFICIENCY
         return 0
 
+    # Adds the specified statistic to the specified list
     def addStat(self, stat = "stop", value = ""):
         if (stat.lower() == "expertise"):
             if(self.EXPERTISES[0] == "None" and self.PROFICIENCIES[0] == "None"):
@@ -215,6 +221,7 @@ class Character:
             print("Please choose from 'Proficiency', 'Expertise', 'Resistance', or 'Vulnerability'.")
             return
     
+    # Removes a stat from the specified list
     def removeStat(self, stat = "stop", value = ""):
         if (stat == "proficiency" and (value.lower() in self.PROFICIENCIES)):
             self.PROFICIENCIES.remove(value.lower())
@@ -225,7 +232,7 @@ class Character:
         elif (stat == "stop"):
             return
         else:
-            print("The statistic requested does not exist in the list defined.")
+            print("The statistic requested does not exist in the list defined or the statistic is misspelled.")
             return
 
     
