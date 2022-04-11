@@ -20,5 +20,5 @@ class Action:
     def __str__(self) -> str:
         print("Name: " + self.NAME)
         print("Desc: " + self.DESCRIPTION)
-        print("Action type: " + self.ACTION_TYPE)
+        print("Action Type: " + self.ACTION_TYPE)
         print("Requires Save?: " + self.REQUIRES_SAVE)

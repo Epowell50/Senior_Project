@@ -57,6 +57,8 @@ class Character:
     EXPERTISES = []
     RESISTANCES = []
     VULNERABILITIES = []
+
+    # In Progress
     ACTIONS = [] # By name
     ATTACKS = [] # By name
     SPELLS = [] # By name
@@ -215,22 +217,24 @@ class Character:
                 self.VULNERABILITIES.remove("None")
             if(value.lower() not in self.VULNERABILITIES):
                 self.VULNERABILITIES.append(value.lower())
-        elif (stat.lower() == "stop"):
-            return
         else:
             print("Please choose from 'Proficiency', 'Expertise', 'Resistance', or 'Vulnerability'.")
             return
     
     # Removes a stat from the specified list
     def removeStat(self, stat = "stop", value = ""):
-        if (stat == "proficiency" and (value.lower() in self.PROFICIENCIES)):
+        
+        if (stat == "expertise" and (value.lower() in self.EXPERTISES)):
+            self.EXPERTISES.remove(value.lower())
             self.PROFICIENCIES.remove(value.lower())
+        elif (stat == "proficiency" and (value.lower() in self.PROFICIENCIES)):
+            self.PROFICIENCIES.remove(value.lower())
+            if(value.lower() in self.EXPERTISES):
+                self.EXPERTISES.remove(value.lower)
         elif (stat == "resistance" and (value.lower() in self.RESISTANCES)):
             self.RESISTANCES.remove(value.lower())
-        elif (stat == "vunerability" and (value.lower() in self.VULNERABILITIES)):
+        elif (stat == "vulnerability" and (value.lower() in self.VULNERABILITIES)):
             self.VULNERABILITIES.remove(value.lower())
-        elif (stat == "stop"):
-            return
         else:
             print("The statistic requested does not exist in the list defined or the statistic is misspelled.")
             return
