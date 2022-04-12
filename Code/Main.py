@@ -26,11 +26,88 @@ while(True):
         print("Goodbye!")
         break
     elif(temp == "1"): # Create character functionality
-        # Create character stuff here
-        pass
-    elif(temp == "2"): # Edit character functionality
+        print("\n\n\n\n\n\n\n\n\n\n")
         while(True):
-            print("\n\n\n\n\n\n\n\n\n\n")
+            print("----- Create Character -----")
+            print("\nSaved Characters: ")
+            for i in characters:
+                print(i.NAME)
+            print("")
+            name = input("Please type your new character's name or press ENTER to go back: ")
+            if(name == ""):
+                print("\n\n\n\n\n\n\n\n\n\n")
+                break
+            # Level input
+            level = 'a'
+            while(not(level.isdigit())):
+                level = input("Please type " + name + "'s level: ")
+                if(not(level.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # HP input
+            flag = 1
+            while(flag):
+                currhp = input("Please type " + name + "'s current HP: ")
+                try:
+                    currhp = int(currhp)
+                    flag = 0
+                except ValueError:
+                    print("\nPlease input an integer value.")
+            flag = 1
+            while(flag):
+                maxhp = input("Please type " + name + "'s max HP: ")
+                try:
+                    maxhp = int(maxhp)
+                except ValueError:
+                    print("\nPlease input an integer value.")
+                if(currhp > maxhp):
+                    print("\nMaximum HP cannot be smaller than current hp.")
+                if(maxhp > currhp and int(maxhp)):
+                    flag = 0
+            # AC input
+            ac = 'a'
+            while(not(ac.isdigit())):
+                ac = input("Please type " + name + "'s armor class: ")
+                if(not(ac.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # Strength input
+            str = 'a'
+            while(not(str.isdigit())):
+                str = input("Please type " + name + "'s strength score: ")
+                if(not(str.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # Dexterity input
+            dex = 'a'
+            while(not(dex.isdigit())):
+                dex = input("Please type " + name + "'s dexterity score: ")
+                if(not(dex.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # Constitution input
+            con = 'a'
+            while(not(con.isdigit())):
+                con = input("Please type " + name + "'s constitution score: ")
+                if(not(con.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # Intelligence input
+            intel = 'a'
+            while(not(intel.isdigit())):
+                intel = input("Please type " + name + "'s intelligence score: ")
+                if(not(level.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # Wisdom input
+            wis = 'a'
+            while(not(wis.isdigit())):
+                wis = input("Please type " + name + "'s wisdom score: ")
+                if(not(wis.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+            # Charisma input
+            cha = 'a'
+            while(not(cha.isdigit())):
+                cha = input("Please type " + name + "'s charisma score: ")
+                if(not(cha.isdigit())):
+                    print("\nPlease enter a positive number with no alphabetic characters.")
+    elif(temp == "2"): # Edit character functionality
+        print("\n\n\n\n\n\n\n\n\n\n")
+        while(True):
             print("----- Edit Character -----")
             print("\nSaved Characters: ")
             for i in characters:
