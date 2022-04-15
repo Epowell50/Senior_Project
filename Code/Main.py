@@ -57,12 +57,12 @@ while(True):
                 maxhp = input("Please type " + name + "'s max HP: ")
                 try:
                     maxhp = int(maxhp)
+                    if(currhp > maxhp):
+                        print("\nMaximum HP cannot be smaller than current hp.")
+                    if(maxhp >= currhp and int(maxhp)):
+                        flag = 0
                 except ValueError:
                     print("\nPlease input an integer value.")
-                if(currhp > maxhp):
-                    print("\nMaximum HP cannot be smaller than current hp.")
-                if(maxhp > currhp and int(maxhp)):
-                    flag = 0
             # AC input
             ac = 'a'
             while(not(ac.isdigit())):
@@ -70,10 +70,10 @@ while(True):
                 if(not(ac.isdigit())):
                     print("\nPlease enter a positive number with no alphabetic characters.")
             # Strength input
-            str = 'a'
-            while(not(str.isdigit())):
-                str = input("Please type " + name + "'s strength score: ")
-                if(not(str.isdigit())):
+            stren = 'a'
+            while(not(stren.isdigit())):
+                stren = input("Please type " + name + "'s strength score: ")
+                if(not(stren.isdigit())):
                     print("\nPlease enter a positive number with no alphabetic characters.")
             # Dexterity input
             dex = 'a'
@@ -105,6 +105,25 @@ while(True):
                 cha = input("Please type " + name + "'s charisma score: ")
                 if(not(cha.isdigit())):
                     print("\nPlease enter a positive number with no alphabetic characters.")
+            newchar = Character(name, int(level), int(currhp), int(maxhp), \
+                                int(ac), int(stren), int(dex), int(con), \
+                                int(intel), int(wis), int(cha))
+            print("----- " + name + "'s Statistics -----\n")
+            print("Level: " + str(level))
+            print("HP: " + str(currhp) + "/" + str(maxhp))
+            print("Armor Class: " + str(ac))
+            print("STR: " + str(stren) + " (" + newchar.format(newchar.getMod(stren)) + ")")
+            print("DEX: " + str(dex) + " (" + newchar.format(newchar.getMod(dex)) + ")")
+            print("CON: " + str(con) + " (" + newchar.format(newchar.getMod(con)) + ")")
+            print("INT: " + str(intel) + " (" + newchar.format(newchar.getMod(intel)) + ")")
+            print("WIS: " + str(wis) + " (" + newchar.format(newchar.getMod(wis)) + ")")
+            print("CHA: " + str(cha) + " (" + newchar.format(newchar.getMod(cha)) + ")")
+            userinput = input("\n Does this look right (y/n)? ")
+            print("\n\n\n\n\n\n\n\n\n\n")
+            if(userinput == "Y" or userinput == "y" or userinput == "Yes" or userinput == "yes"):
+                characters.append(newchar)
+                print("\n\n\n\n\n\n\n\n\n\n")
+                break
     elif(temp == "2"): # Edit character functionality
         print("\n\n\n\n\n\n\n\n\n\n")
         while(True):

@@ -14,4 +14,4 @@ char1.JACK_OF_ALL_TRADES = True
 newchar = rip("Test.pdf")
 newchar.NAME = "Test1"
 
-print(char1)
+print(str(char1.PROFICIENCIES))
