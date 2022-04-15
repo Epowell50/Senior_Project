@@ -1,61 +1,60 @@
 import sqlite3
 from Character_Class import Character
 
-# Creating database connection and name the file
-conn = sqlite3.connect(':memory:')
-
-# Create cursor to execute database commands
-cursor = conn.cursor()
-
 # Create table using doc-string
-cursor.execute("""CREATE TABLE characters (
-            name text,
-            level integer,
-            proficiency integer,
-            ac integer,
-            initiative integer,
-            current_hp integer,
-            max_hp integer,
-            str integer,
-            dex integer,
-            con integer,
-            int integer,
-            wis integer,
-            cha integer,
-            str_save integer,
-            dex_save integer,
-            con_save integer,
-            int_save integer,
-            wis_save integer,
-            cha_save integer,
-            death_success integer,
-            death_failure integer,
-            acrobatics integer,
-            animal_handling integer,
-            arcana integer,
-            athletics integer,
-            deception integer,
-            history integer,
-            insight integer,
-            intimidation integer,
-            invesitgation integer,
-            medicine integer,
-            nature integer,
-            perception integer,
-            performance integer,
-            persuasion integer,
-            religion integer,
-            sleight_of_hand integer,
-            stealth integer,
-            survival integer,
-            prof text,
-            expert text,
-            resist text,
-            vuln text,
-            joat integer)""")
+#cursor.execute("""CREATE TABLE characters (
+#            name text NOT NULL PRIMARY KEY,
+#            level integer,
+#            proficiency integer,
+#            ac integer,
+#            initiative integer,
+#            current_hp integer,
+#            max_hp integer,
+#            str integer,
+#            dex integer,
+#            con integer,
+#            int integer,
+#            wis integer,
+#            cha integer,
+#            str_save integer,
+#            dex_save integer,
+#            con_save integer,
+#            int_save integer,
+#            wis_save integer,
+#            cha_save integer,
+#            death_success integer,
+#            death_failure integer,
+#            acrobatics integer,
+#            animal_handling integer,
+#            arcana integer,
+#            athletics integer,
+#            deception integer,
+#            history integer,
+#            insight integer,
+#            intimidation integer,
+#            invesitgation integer,
+#            medicine integer,
+#            nature integer,
+#            perception integer,
+#            performance integer,
+#            persuasion integer,
+#            religion integer,
+#            sleight_of_hand integer,
+#            stealth integer,
+#            survival integer,
+#            prof text,
+#            expert text,
+#            resist text,
+#            vuln text,
+#            joat integer)""")
 
 # Insterts a character object into the database
 def insert_char(char):
+    # Creating database connection and name the file
+    conn = sqlite3.connect('characters.db')
+
+    # Create cursor to execute database commands
+    cursor = conn.cursor()
     # Convert lists to strings for storage
     proficiencies = ','.join(char.PROFICIENCIES)
     expertises = ','.join(char.EXPERTISES)
@@ -97,18 +96,58 @@ def insert_char(char):
 
 # Searches a character by their last name
 def search_char(name):
+    # Creating database connection and name the file
+    conn = sqlite3.connect('characters.db')
+
+    # Create cursor to execute database commands
+    cursor = conn.cursor()
     cursor.execute("SELECT * FROM characters WHERE name = :name", {'name': name})
-    return cursor.fetchall()
+    conn.close()
+    return cursor.fetchone()
 
 # Removes a character given the character object
 def remove_char(name):
+    # Creating database connection and name the file
+    conn = sqlite3.connect('characters.db')
+
+    # Create cursor to execute database commands
+    cursor = conn.cursor()
     with conn:
         cursor.execute("DELETE from characters WHERE name = :name", 
         {'name': name})
 
-char1 = Character("Errant", 10, 20, 25, 16, 10, 18, 12, 4, 12, 20)
+# Returns a list with all characters in the database
+def query_all():
+    character_list = []
 
-insert_char(char1)
-print(search_char("Errant"))
+    # Creating databse connection and namem the file
+    conn = sqlite3.connect('characters.db')
+    cursor = conn.cursor()
+    with conn:
+        cursor.execute("SELECT * from characters")
+        for character in cursor.fetchall():
+            # Fix strings into lists
+            prof = character[39].split(",")
+            expert = character[40].split(",")
+            res = character[41].split(",")
+            vuln = character[42].split(",")
 
-conn.close()
+            # Create character object with database stats
+            # This is not as scalable as a select statement, but is more compact
+            #   for my purposes. In the future, it should be modified for scalability
+            newchar = Character(character[0], character[1], character[5], \
+                character[6], character[3], character[7], character[8], \
+                character[9], character[10], character[11], character[12], \
+                prof, res, vuln, expert, character[43], character[19], \
+                character[20], character[4])
+            
+            # Fill in skills and saves as they are not in the constructor
+            newchar.STR_SAVE
+            newchar.DEX_SAVE
+            newchar.CON_SAVE
+            newchar.INT_SAVE
+            newchar.WIS_SAVE
+            newchar.CHA_SAVE
+            character_list.append(newchar)
+
+    return character_list

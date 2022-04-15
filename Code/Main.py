@@ -1,15 +1,24 @@
 from select import select
+from sqlite3 import IntegrityError
 from Character_Class import *
 from Attack import *
 from Pdf_Rip import rip
+from SQLite import *
 
-# Character list
+# Creates character list for program during runtime
 characters = []
 
 print("Hello and welcome to the DND Utilities python tool!")
 print("This program was created by Ethan Powell in fulfillment of " + \
       "the requirements of a BS in Cybersecurity and BS in Computer Science")
 print("----------------------------------------------------------\n")
+print("Loading saved characters...")
+
+# Loads characters from database. Temporary fix until references to database can be made in program
+print("")
+query_all()
+print("")
+
 print("To begin, please select from the options below by typing the number associated: ")
 
 # Base program loop
@@ -23,6 +32,14 @@ while(True):
         print("Goodbye!")
         break
     elif(temp.lower() == ""):
+        print("Saving characters...")
+        for i in characters:
+            try:
+                insert_char(i)
+            except IntegrityError: # This is a temporary fix until a better update can be handled
+                remove_char(i.NAME)
+                insert_char(i)
+                pass
         print("Goodbye!")
         break
     elif(temp == "1"): # Create character functionality
@@ -338,7 +355,9 @@ while(True):
                                                   "5. Deception\n6. History\n7. Insight\n8. Intimidation\n" + \
                                                   "9. Investigation\n10. Medicine\n11. Nature\n12. Perception\n" + \
                                                   "13. Performance\n14. Persuasion\n15. Religion\n16. Sleight of Hand\n" + \
-                                                  "17. Stealth\n18. Surivial\n19. Custom")
+                                                  "17. Stealth\n18. Surivial\n19. Strength Saves\n20. Dexterity Saves\n" + \
+                                                  "21. Constitution Saves\n22. Intelligence Saves\n23. Wisdom Saves\n" + \
+                                                  "24. Charisma Saves\n25. Custom")
                                             print("\nProficiencies: ", end="")
                                             print(i.PROFICIENCIES, end="")
                                             print("\n")
@@ -383,6 +402,18 @@ while(True):
                                             elif(selection == "18"):
                                                 i.addStat("proficiency", "survival")
                                             elif(selection == "19"):
+                                                i.addStat("proficiency", "stength saves")
+                                            elif(selection == "20"):
+                                                i.addStat("proficiency", "dexterity saves")
+                                            elif(selection == "21"):
+                                                i.addStat("proficiency", "constitution saves")
+                                            elif(selection == "22"):
+                                                i.addStat("proficiency", "intelligence saves")
+                                            elif(selection == "23"):
+                                                i.addStat("proficiency", "wisdom saves")
+                                            elif(selection == "24"):
+                                                i.addStat("proficiency", "charisma saves")
+                                            elif(selection == "25"):
                                                 prof = input("Please enter your custom proficiency: ")
                                                 i.addStat("proficiency", prof)
                                             else:
