@@ -226,11 +226,10 @@ class Character:
         
         if (stat == "expertise" and (value.lower() in self.EXPERTISES)):
             self.EXPERTISES.remove(value.lower())
-            self.PROFICIENCIES.remove(value.lower())
         elif (stat == "proficiency" and (value.lower() in self.PROFICIENCIES)):
             self.PROFICIENCIES.remove(value.lower())
             if(value.lower() in self.EXPERTISES):
-                self.EXPERTISES.remove(value.lower)
+                self.EXPERTISES.remove(value.lower())
         elif (stat == "resistance" and (value.lower() in self.RESISTANCES)):
             self.RESISTANCES.remove(value.lower())
         elif (stat == "vulnerability" and (value.lower() in self.VULNERABILITIES)):

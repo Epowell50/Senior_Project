@@ -503,6 +503,8 @@ while(True):
                                                     i.removeStat("proficiency", i.PROFICIENCIES[(int(selection) - 1)])
                                                     if(len(i.PROFICIENCIES) == 0):
                                                         i.PROFICIENCIES.append("None")
+                                                    if(len(i.EXPERTISES) == 0):
+                                                        i.EXPERTISES.append("None")
                                     elif(selection == "4"): # Remove expert
                                         print("\n\n\n\n\n\n\n\n\n\n")
                                         while(True):
@@ -710,13 +712,13 @@ while(True):
                                         print("Please choose a number from the listed options below")
                             elif(option == "7"):
                                 if(i.JACK_OF_ALL_TRADES == True):
-                                    print("JOAT set to 'False'")
                                     i.JACK_OF_ALL_TRADES = False
                                     print("\n\n\n\n\n\n\n\n\n\n")
+                                    print("JOAT set to 'False'")
                                 else:
-                                    print("JOAT set to 'True'")
                                     i.JACK_OF_ALL_TRADES = True
                                     print("\n\n\n\n\n\n\n\n\n\n")
+                                    print("JOAT set to 'True'")
                             else:
                                 print("\n\n\n\n\n\n\n\n\n\n")
                                 print("Please choose from the listed options below by typing a number")
@@ -802,6 +804,7 @@ while(True):
                 if(not flag):
                     print("Character does not exist. Please check spelling.")
                     input("Please press ENTER to continue...")
+                    print("\n\n\n\n\n\n\n\n\n\n")
     else:
         print("\n\n\n\n\n\n\n\n\n\n")
         print("Please choose from the listed options below by typing a number")
