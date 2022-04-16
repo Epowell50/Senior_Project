@@ -1,52 +1,62 @@
 import sqlite3
 from Character_Class import Character
 
-# Create table using doc-string
-#cursor.execute("""CREATE TABLE characters (
-#            name text NOT NULL PRIMARY KEY,
-#            level integer,
-#            proficiency integer,
-#            ac integer,
-#            initiative integer,
-#            current_hp integer,
-#            max_hp integer,
-#            str integer,
-#            dex integer,
-#            con integer,
-#            int integer,
-#            wis integer,
-#            cha integer,
-#            str_save integer,
-#            dex_save integer,
-#            con_save integer,
-#            int_save integer,
-#            wis_save integer,
-#            cha_save integer,
-#            death_success integer,
-#            death_failure integer,
-#            acrobatics integer,
-#            animal_handling integer,
-#            arcana integer,
-#            athletics integer,
-#            deception integer,
-#            history integer,
-#            insight integer,
-#            intimidation integer,
-#            invesitgation integer,
-#            medicine integer,
-#            nature integer,
-#            perception integer,
-#            performance integer,
-#            persuasion integer,
-#            religion integer,
-#            sleight_of_hand integer,
-#            stealth integer,
-#            survival integer,
-#            prof text,
-#            expert text,
-#            resist text,
-#            vuln text,
-#            joat integer)""")
+def initialize():
+    conn = sqlite3.connect('characters.db')
+
+    # Create cursor to execute database commands
+    cursor = conn.cursor()
+    
+    try:
+        # Create table using doc-string
+        cursor.execute("""CREATE TABLE characters (
+                name text NOT NULL PRIMARY KEY,
+                level integer,
+                proficiency integer,
+                ac integer,
+                initiative integer,
+                current_hp integer,
+                max_hp integer,
+                str integer,
+                dex integer,
+                con integer,
+                int integer,
+                wis integer,
+                cha integer,
+                str_save integer,
+                dex_save integer,
+                con_save integer,
+                int_save integer,
+                wis_save integer,
+                cha_save integer,
+                death_success integer,
+                death_failure integer,
+                acrobatics integer,
+                animal_handling integer,
+                arcana integer,
+                athletics integer,
+                deception integer,
+                history integer,
+                insight integer,
+                intimidation integer,
+                invesitgation integer,
+                medicine integer,
+                nature integer,
+                perception integer,
+                performance integer,
+                persuasion integer,
+                religion integer,
+                sleight_of_hand integer,
+                stealth integer,
+                survival integer,
+                prof text,
+                expert text,
+                resist text,
+                vuln text,
+                joat integer)""")
+    except sqlite3.OperationalError:
+         pass
+    conn.close()
 
 # Insterts a character object into the database
 def insert_char(char):
@@ -142,12 +152,30 @@ def query_all():
                 character[20], character[4])
             
             # Fill in skills and saves as they are not in the constructor
-            newchar.STR_SAVE
-            newchar.DEX_SAVE
-            newchar.CON_SAVE
-            newchar.INT_SAVE
-            newchar.WIS_SAVE
-            newchar.CHA_SAVE
+            newchar.STR_SAVE = character[13]
+            newchar.DEX_SAVE = character[14]
+            newchar.CON_SAVE = character[15]
+            newchar.INT_SAVE = character[16]
+            newchar.WIS_SAVE = character[17]
+            newchar.CHA_SAVE = character[18]
+            newchar.ACROBATICS = character[19]
+            newchar.ANIMAL_HANDLING = character[20]
+            newchar.ARCANA = character[21]
+            newchar.ATHLETICS = character[22]
+            newchar.DECEPTION = character[23]
+            newchar.HISTORY = character[24]
+            newchar.INSIGHT = character[25]
+            newchar.INTIMIDATION = character[26]
+            newchar.INVESTIGATION = character[27]
+            newchar.MEDICINE = character[28]
+            newchar.NATURE = character[29]
+            newchar.PERCEPTION = character[30]
+            newchar.PERFORMANCE = character[31]
+            newchar.PERSUASION = character[32]
+            newchar.RELIGION = character[33]
+            newchar.SLEIGHT_OF_HAND = character[34]
+            newchar.STEALTH = character[35]
+            newchar.SURVIVAL = character[36]
             character_list.append(newchar)
 
     return character_list

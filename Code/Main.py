@@ -14,17 +14,17 @@ print("This program was created by Ethan Powell in fulfillment of " + \
 print("----------------------------------------------------------\n")
 print("Loading saved characters...")
 
+# Create the database file if it doesn't exist
+initialize()
 # Loads characters from database. Temporary fix until references to database can be made in program
-print("")
-query_all()
-print("")
+characters = query_all()
 
 print("To begin, please select from the options below by typing the number associated: ")
 
 # Base program loop
 while(True):
     print("----- DND Utilities -----")
-    print("1: Create Character\n2: Edit Character\n3: Import Character from PDF\n4: View Characters")
+    print("1: Create Character\n2: Edit Character\n3: Import Character from PDF\n4: View Characters\n5. Delete Character")
     print("Type 'stop' or press ENTER to quit.")
     temp = input("Selection: ")
 
@@ -161,7 +161,7 @@ while(True):
                         while(True):
                             print("----- Editing Character: " + name + " -----")
                             print("1. Base Stats\n2. Saves\n3. Skills\n4. Proficiencies & Expertises\n" + \
-                                  "5. Resistances\n6. Vulnerabilities")
+                                  "5. Resistances\n6. Vulnerabilities\n7. Enable/Disable Jack of All Trades")
                             option = input("Please choose the section you wish to edit or press ENTER to go back: ")
                             if(option == ""):
                                 print("\n\n\n\n\n\n\n\n\n\n")
@@ -331,8 +331,8 @@ while(True):
                                     elif(selection.lower() == "passive perception"):
                                         i.PASSIVE_PERCEPTION = int(input(name + "'s new passive perception: "))
                                     else:
-                                            print("\n\n\n\n\n\n\n\n\n\n")
-                                            print("Please choose from the listed options below")
+                                        print("\n\n\n\n\n\n\n\n\n\n")
+                                        print("Please choose from the listed options below")
                             elif(option == "4"): # Edit Proficiencies and Expertises
                                 print("\n\n\n\n\n\n\n\n\n\n")
                                 while(True):
@@ -708,6 +708,15 @@ while(True):
                                     else:
                                         print("\n\n\n\n\n\n\n\n\n\n")
                                         print("Please choose a number from the listed options below")
+                            elif(option == "7"):
+                                if(i.JACK_OF_ALL_TRADES == True):
+                                    print("JOAT set to 'False'")
+                                    i.JACK_OF_ALL_TRADES = False
+                                    print("\n\n\n\n\n\n\n\n\n\n")
+                                else:
+                                    print("JOAT set to 'True'")
+                                    i.JACK_OF_ALL_TRADES = True
+                                    print("\n\n\n\n\n\n\n\n\n\n")s
                             else:
                                 print("\n\n\n\n\n\n\n\n\n\n")
                                 print("Please choose from the listed options below by typing a number")
@@ -770,7 +779,29 @@ while(True):
                     print("Character does not exist. Please check spelling.")
                     input("Please press ENTER to continue...")
     elif(temp == "5"):
-        print("1: Create Character\n2: Edit Character\n3: Import Character from PDF\n4: Display Character")
+        print("\n\n\n\n\n\n\n\n\n\n")
+        while(True):
+            print("----- Delete Character -----")
+            print("\nSaved Characters: ")
+            for i in characters:
+                print(i.NAME)
+            print("")
+            name = input("Please type the character's name you wish to delete or press ENTER to go back: ")
+            if(name == ""):
+                print("\n\n\n\n\n\n\n\n\n\n")
+                break
+            else:
+                flag = False
+                for i in characters:
+                    if(i.NAME.lower() == name.lower()):
+                        flag = True
+                        remove_char(name)
+                        characters.remove(i)
+                        input("Character deleted successfully. Please press ENTER to continue...")
+                        print("\n\n\n\n\n\n\n\n\n\n")
+                if(not flag):
+                    print("Character does not exist. Please check spelling.")
+                    input("Please press ENTER to continue...")
     else:
         print("\n\n\n\n\n\n\n\n\n\n")
         print("Please choose from the listed options below by typing a number")
