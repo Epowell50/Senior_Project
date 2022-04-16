@@ -716,7 +716,7 @@ while(True):
                                 else:
                                     print("JOAT set to 'True'")
                                     i.JACK_OF_ALL_TRADES = True
-                                    print("\n\n\n\n\n\n\n\n\n\n")s
+                                    print("\n\n\n\n\n\n\n\n\n\n")
                             else:
                                 print("\n\n\n\n\n\n\n\n\n\n")
                                 print("Please choose from the listed options below by typing a number")
