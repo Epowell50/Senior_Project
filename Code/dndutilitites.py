@@ -1,5 +1,10 @@
+from mimetypes import init
+from msilib.text import tables
+from multiprocessing.sharedctypes import Value
+from re import T
 from select import select
 from sqlite3 import IntegrityError
+from tokenize import tabsize
 from Character_Class import *
 #from Attack import *
 from Pdf_Rip import rip
@@ -157,6 +162,7 @@ while(True):
                 flag = False
                 for i in characters:
                     if(i.NAME.lower() == name.lower()):
+                        flag = True
                         print("\n\n\n\n\n\n\n\n\n\n")
                         while(True):
                             print("----- Editing Character: " + name + " -----")
@@ -192,13 +198,33 @@ while(True):
                                         print("\n\n\n\n\n\n\n\n\n\n")
                                         break
                                     elif(selection.lower() == "level"):
-                                        i.LEVEL = int(input(name + "'s new level: "))
+                                        level = 'a'
+                                        while(not level.isdigit()):
+                                            level = input(name + "'s new level: ")
+                                            if(not level.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.LEVEL = int(level)
                                     elif(selection.lower() == "proficiency bonus"):
-                                        i.PROFICIENCY = int(input(name + "'s new proficiency bonus: "))
+                                        prof = 'a'
+                                        while(not prof.isdigit()):
+                                            prof = input(name + "'s new proficiency bonus: ")
+                                            if(not prof.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.PROFICIENCY = int(prof)
                                     elif(selection.lower() == "initiative"):
-                                        i.INITIATIVE = int(input(name + "'s new initiative: "))
+                                        initi = 'a'
+                                        while(not initi.isdigit()):
+                                            initi = input(name + "'s new initiative: ")
+                                            if(not initi.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.INITIATIVE = int(initi)
                                     elif(selection.lower() == "ac"):
-                                        i.AC = int(input(name + "'s new AC: "))
+                                        ac = 'a'
+                                        while(not ac.isdigit()):
+                                            ac = input(name + "'s new AC: ")
+                                            if(not ac.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.AC = int(ac)
                                     elif(selection.lower() == "hp"):
                                         while(True):
                                             print("HP: " + str(i.CURRENT_HP) + "/" + str(i.MAX_HP))
@@ -218,17 +244,47 @@ while(True):
                                                 print("\n\n\n\n\n\n\n\n\n\n")
                                                 print("Please choose 'current' or 'maximum' HP")
                                     elif(selection.lower() == "strength" or selection.lower() == "str"):
-                                        i.STR = int(input(name + "'s new strength: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new strength score: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.STR = int(t)
                                     elif(selection.lower() == "dexterity" or selection.lower() == "dex"):
-                                        i.DEX = int(input(name + "'s new dexterity: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new dexterity score: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.DEX = int(t)
                                     elif(selection.lower() == "constitution" or selection.lower() == "con"):
-                                        i.CON = int(input(name + "'s new constitution: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new constitution score: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.CON = int(t)
                                     elif(selection.lower() == "intelligence" or selection.lower() == "int"):
-                                        i.INT = int(input(name + "'s new intelligence: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new intelligence score: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.INT = int(t)
                                     elif(selection.lower() == "wisdom" or selection.lower() == "wis"):
-                                        i.WIS = int(input(name + "'s new wisdom: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new wisdom score: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.WIS = int(t)
                                     elif(selection.lower() == "charisma" or selection.lower() == "cha"):
-                                        i.CHA = int(input(name + "'s new charisma: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new dexterity score: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.CHA = int(t)
                                     else:
                                         print("\n\n\n\n\n\n\n\n\n\n")
                                         print("Please choose from the listed options below")
@@ -247,22 +303,52 @@ while(True):
                                         break
                                     elif(selection.lower() == "strength save" or selection.lower() == "str save" \
                                             or selection.lower() == "str"):
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new strength save: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
                                         i.STR_SAVE = int(input(name + "'s new strength save: "))
                                     elif(selection.lower() == "dexterity save" or selection.lower() == "dex save" \
                                             or selection.lower() == "dex"):
-                                        i.DEX_SAVE = int(input(name + "'s new dexterity save: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new dexterity save: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.DEX_SAVE = int(t)
                                     elif(selection.lower() == "constitution save" or selection.lower() == "con save" \
                                             or selection.lower() == "con"):
-                                        i.CON_SAVE = int(input(name + "'s new constitution save: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new constitution save: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.CON_SAVE = int(t)
                                     elif(selection.lower() == "intelligence save" or selection.lower() == "int save" \
                                             or selection.lower() == "int"):
-                                        i.INT_SAVE = int(input(name + "'s new intelligence save: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new intelligence save: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.INT_SAVE = int(t)
                                     elif(selection.lower() == "wisdom save" or selection.lower() == "wis" \
                                             or selection.lower() == "wis"):
-                                        i.WIS_SAVE = int(input(name + "'s new wisdom save: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new wisdom save: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.WIS_SAVE = int(t)
                                     elif(selection.lower() == "charisma save" or selection.lower() == "cha save" \
                                             or selection.lower() == "cha"):
-                                        i.CHA_SAVE = int(input(name + "'s new charisma save: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new charisma save: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.CHA_SAVE = int(t)
                                     else:
                                         print("\n\n\n\n\n\n\n\n\n\n")
                                         print("Please choose from the listed options below")
@@ -293,43 +379,138 @@ while(True):
                                             print("\n\n\n\n\n\n\n\n\n\n")
                                             break
                                     elif(selection.lower() == "acrobatics"):
-                                        i.ACROBATICS = int(input(name + "'s new acrobatics: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new acrobatics: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.ACROBATICS = int(t)
                                     elif(selection.lower() == "animal handling"):
-                                        i.ANIMAL_HANDLING = int(input(name + "'s new animal handling: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new animal handling: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.ANIMAL_HANDLING = int(t)
                                     elif(selection.lower() == "arcana"):
-                                        i.ARCANA = int(input(name + "'s new arcana: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new arcana: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.ARCANA = int(t)
                                     elif(selection.lower() == "athletics"):
-                                        i.ATHLETICS = int(input(name + "'s new athletics: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new athletics: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.ATHLETICS = int(t)
                                     elif(selection.lower() == "deception"):
-                                        i.DECEPTION = int(input(name + "'s new deception: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new deception: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.DECEPTION = int(t)
                                     elif(selection.lower() == "history"):
-                                        i.HISTORY = int(input(name + "'s new history: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new history: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.HISTORY = int(t)
                                     elif(selection.lower() == "insight"):
-                                        i.INSIGHT = int(input(name + "'s new insight: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new insight: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.INSIGHT = int(t)
                                     elif(selection.lower() == "intimidation"):
-                                        i.INTIMIDATION = int(input(name + "'s new intimidation: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new intimidation: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.INTIMIDATION = int(t)
                                     elif(selection.lower() == "investigation"):
-                                        i.INVESTIGATION = int(input(name + "'s new investigation: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new investigation: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.INVESTIGATION = int(t)
                                     elif(selection.lower() == "medicine"):
-                                        i.MEDICINE = int(input(name + "'s new medicine: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new medicine: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.MEDICINE = int(t)
                                     elif(selection.lower() == "nature"):
-                                        i.NATURE = int(input(name + "'s new nature: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new nature: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.NATURE = int(t)
                                     elif(selection.lower() == "perception"):
-                                        i.PERCEPTION = int(input(name + "'s new perception: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new perception: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.PERCEPTION = int(t)
                                     elif(selection.lower() == "performance"):
-                                        i.PERFORMANCE = int(input(name + "'s new performance: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new performance: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.PERFORMANCE = int(t)
                                     elif(selection.lower() == "persuasion"):
-                                        i.PERSUASION = int(input(name + "'s new persuasion: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new persuasion: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.PERSUASION = int(t)
                                     elif(selection.lower() == "religion"):
-                                        i.RELIGION = int(input(name + "'s new religion: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new religion: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.RELIGION = int(t)
                                     elif(selection.lower() == "sleight of hand"):
-                                        i.SLEIGHT_OF_HAND = int(input(name + "'s new sleight of hand: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new sleight of hand: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.SLEIGHT_OF_HAND = int(t)
                                     elif(selection.lower() == "stealth"):
-                                        i.STEALTH = int(input(name + "'s new stealth: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new stealth: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.STEALTH = int(t)
                                     elif(selection.lower() == "survival"):
-                                        i.SURVIVAL = int(input(name + "'s new survival: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new survival: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.SURVIVAL = int(t)
                                     elif(selection.lower() == "passive perception"):
-                                        i.PASSIVE_PERCEPTION = int(input(name + "'s new passive perception: "))
+                                        t = 'a'
+                                        while(not t.isdigit()):
+                                            t = input(name + "'s new passive perception: ")
+                                            if(not t.isdigit()):
+                                                print("Please enter a positive number with no alphabetic characters.")
+                                        i.PASSIVE_PERCEPTION = int(t)
                                     else:
                                         print("\n\n\n\n\n\n\n\n\n\n")
                                         print("Please choose from the listed options below")
@@ -722,10 +903,10 @@ while(True):
                             else:
                                 print("\n\n\n\n\n\n\n\n\n\n")
                                 print("Please choose from the listed options below by typing a number")
-                            flag = True
                 if(not flag):
                     print("Character does not exist. Please check spelling.")
                     input("Please press ENTER to continue...")
+                    print("\n\n\n\n\n\n\n\n\n\n")
     elif(temp == "3"): # Import character functionality
         print("\n\n\n\n\n\n\n\n\n\n")
         print("----- Import Character -----")
