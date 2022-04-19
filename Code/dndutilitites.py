@@ -1,7 +1,7 @@
 from select import select
 from sqlite3 import IntegrityError
 from Character_Class import *
-from Attack import *
+#from Attack import *
 from Pdf_Rip import rip
 from SQLite import *
 

@@ -1,7 +1,7 @@
 import math
 import re
 
-from Attack import *
+#from Attack import *
 
 class Character:
     # Base Stats
