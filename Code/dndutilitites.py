@@ -926,11 +926,10 @@ while(True):
                         input("Press ENTER to continue...")
                         print("\n\n\n\n\n\n\n\n\n\n")
                         break
-                    else:
-                        characters.append(retVal)
-                        print("Sucess! Please add proficiencies, expertises, resistances, and vulnerabilites manually.")
-                        input("Please press ENTER to continue...")
-                        print("\n\n\n\n\n\n\n\n\n\n")
+                characters.append(retVal)
+                print("Sucess! Please add proficiencies, expertises, resistances, and vulnerabilites manually.")
+                input("Please press ENTER to continue...")
+                print("\n\n\n\n\n\n\n\n\n\n")
     elif(temp == "4"): # View character funcitonality
         while(True):
             print("\n\n\n\n\n\n\n\n\n\n")
