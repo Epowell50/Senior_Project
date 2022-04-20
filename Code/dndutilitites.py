@@ -920,16 +920,19 @@ while(True):
                 input("Please press ENTER to continue...")
                 print("\n\n\n\n\n\n\n\n\n\n")
             else:
+                isfound = False
                 for i in characters:
                     if(retVal.NAME.lower() == i.NAME.lower()):
                         print("The character '" + retVal.NAME + "' already exists, so no action was taken.")
                         input("Press ENTER to continue...")
                         print("\n\n\n\n\n\n\n\n\n\n")
+                        isfound = True
                         break
-                characters.append(retVal)
-                print("Sucess! Please add proficiencies, expertises, resistances, and vulnerabilites manually.")
-                input("Please press ENTER to continue...")
-                print("\n\n\n\n\n\n\n\n\n\n")
+                if(not isfound):
+                    characters.append(retVal)
+                    print("Sucess! Please add proficiencies, expertises, resistances, and vulnerabilites manually.")
+                    input("Please press ENTER to continue...")
+                    print("\n\n\n\n\n\n\n\n\n\n")
     elif(temp == "4"): # View character funcitonality
         while(True):
             print("\n\n\n\n\n\n\n\n\n\n")
